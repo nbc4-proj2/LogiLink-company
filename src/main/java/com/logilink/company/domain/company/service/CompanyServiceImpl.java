@@ -6,6 +6,7 @@ import com.logilink.company.domain.company.model.dto.request.CompanyUpdateReques
 import com.logilink.company.domain.company.model.dto.response.CompanyResponse;
 import com.logilink.company.domain.company.model.entity.Company;
 import com.logilink.company.domain.company.repository.CompanyRepository;
+import com.logilink.company.global.client.HubClient;
 import com.sparta.logilinkcommon.common.exception.AppException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -24,10 +25,16 @@ import java.util.UUID;
 public class CompanyServiceImpl implements CompanyService {
 
     private final CompanyRepository companyRepository;
+    private final HubClient hubClient;
 
     @Override
     @Transactional
     public CompanyResponse createCompany(CompanyCreateRequest companyCreateRequest) {
+
+        if (!hubClient.existsHub(companyCreateRequest.getHubId())) {
+            throw AppException.of(CompanyErrorCode.HUB_NOT_FOUND);
+        }
+
         if (companyRepository.existsByName(companyCreateRequest.getName())) {
             throw AppException.of(CompanyErrorCode.COMPANY_NAME_DUPLICATE);
         }
