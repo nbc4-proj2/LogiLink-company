@@ -1,1 +1,3 @@
-rootProject.name = 'company'
+rootProject.name = "company"
+include ':LogiLink-common'
+project(':LogiLink-common').projectDir = new File('../LogiLink-common')
