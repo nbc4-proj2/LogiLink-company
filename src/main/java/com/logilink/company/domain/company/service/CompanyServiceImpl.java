@@ -33,7 +33,6 @@ public class CompanyServiceImpl implements CompanyService {
     private final CompanyRepository companyRepository;
     private final HubClient hubClient;
     private final AuthHeaderExtractor authHeaderExtractor;
-    private final CompanyServiceImpl companyServiceImpl;
 
     // 현재 요청의 HttpServletRequest를 가져오는 헬퍼 메서드
     private HttpServletRequest getCurrentRequest() {
@@ -72,7 +71,7 @@ public class CompanyServiceImpl implements CompanyService {
         // 소유권 검증: HUB_ADMIN은 자신의 허브 ID 소속으로만 생성 가능
         validateHubAdminOwnership(companyCreateRequest.getHubId());
 
-        if (!companyServiceImpl.isHubExistsAndCached(companyCreateRequest.getHubId())) {
+        if (!isHubExistsAndCached(companyCreateRequest.getHubId())) {
             throw AppException.of(CompanyErrorCode.HUB_NOT_FOUND);
         }
 
