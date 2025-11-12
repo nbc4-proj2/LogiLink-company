@@ -7,6 +7,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.UuidGenerator;
 
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
@@ -53,8 +54,14 @@ public class Company extends BaseTimeEntity {
         if (type != null) this.type = type;
     }
 
-    public void delete(Long userId) {
-        softDelete(userId);
-    }
+    @Column(name = "deleted_at")
+    private LocalDateTime deletedAt;
 
+    @Column(name = "deleted_by")
+    private Long deletedBy; // BaseTimeEntity의 필드와 동일하게 재정의
+
+    public void delete(Long deletedBy) {
+        this.deletedBy = deletedBy;
+        this.deletedAt = LocalDateTime.now();
+    }
 }
