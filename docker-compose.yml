@@ -93,6 +93,15 @@ services:
       - logilink-network
     restart: always
 
+  # 레디스
+  redis:
+    image: redis:7.2-alpine
+    container_name: redis
+    ports:
+      - "6379:6379"
+    networks:
+      - logilink-network
+
 networks:
   logilink-network:
     driver: bridge
